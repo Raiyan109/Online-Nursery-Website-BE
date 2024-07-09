@@ -20,7 +20,7 @@ const getAllProductsFromDB = async () => {
 
 const getASingleProductFromDB = async (id: string) => {
     try {
-        const singleProductInfo = await ProductModel.findByIdAndUpdate(
+        const singleProductInfo = await ProductModel.findById(
             id,
             {
                 new: true,
@@ -62,12 +62,9 @@ const updateProductIntoDB = async (id: string, payload: Partial<TProduct>) => {
 };
 
 const deleteProductFromDB = async (id: string) => {
-    const result = await ProductModel.findByIdAndUpdate(
+    const result = await ProductModel.findByIdAndDelete(
         id,
-        { isDeleted: true },
-        {
-            new: true,
-        },
+        { isDeleted: true }
     );
     return result;
 };
