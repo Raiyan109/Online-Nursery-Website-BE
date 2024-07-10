@@ -37,6 +37,27 @@ const getAllProducts = catchAsync(async (req, res) => {
     });
 });
 
+const getAllCategories = catchAsync(async (req, res) => {
+    const result = await ProductServices.getAllCategoriesFromDB();
+
+    // Check if the database collection is empty or no matching data is found
+    if (!result || result.length === 0) {
+        return sendResponse(res, {
+            success: false,
+            statusCode: httpStatus.NOT_FOUND,
+            message: 'No data found.',
+            data: [],
+        });
+    }
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Categories retrieved successfully',
+        data: result,
+    });
+});
+
 const getASingleProduct = catchAsync(async (req, res) => {
     const { id } = req.params;
     const result = await ProductServices.getASingleProductFromDB(id);
@@ -76,6 +97,7 @@ const deleteProduct = catchAsync(async (req, res) => {
 export const ProductControllers = {
     createProduct,
     getAllProducts,
+    getAllCategories,
     getASingleProduct,
     updateProduct,
     deleteProduct

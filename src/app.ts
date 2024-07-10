@@ -11,7 +11,7 @@ const app: Application = express();
 
 //parsers
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:5137', credentials: true }))
+app.use(cors({ origin: '*' }))
 
 // application routes
 app.use('/api/v1', router);

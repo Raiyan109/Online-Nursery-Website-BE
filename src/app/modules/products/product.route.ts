@@ -18,6 +18,11 @@ router.put(
 router.delete('/:id', ProductControllers.deleteProduct);
 
 router.get(
+    '/categories',
+    ProductControllers.getAllCategories,
+);
+
+router.get(
     '/:id',
     ProductControllers.getASingleProduct,
 );

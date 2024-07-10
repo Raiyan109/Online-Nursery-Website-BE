@@ -18,6 +18,11 @@ const getAllProductsFromDB = async () => {
     return result;
 };
 
+const getAllCategoriesFromDB = async () => {
+    const result = await ProductModel.find({}, { category: 1 })
+    return result;
+};
+
 const getASingleProductFromDB = async (id: string) => {
     try {
         const singleProductInfo = await ProductModel.findById(
@@ -73,6 +78,7 @@ const deleteProductFromDB = async (id: string) => {
 export const ProductServices = {
     createProductIntoDB,
     getAllProductsFromDB,
+    getAllCategoriesFromDB,
     getASingleProductFromDB,
     updateProductIntoDB,
     deleteProductFromDB
