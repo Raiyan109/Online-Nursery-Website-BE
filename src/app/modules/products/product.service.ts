@@ -19,7 +19,7 @@ const getAllProductsFromDB = async () => {
 };
 
 const getAllCategoriesFromDB = async () => {
-    const result = await ProductModel.find({}, { category: 1 })
+    const result = await ProductModel.find({}, { category: 1, image: 1, title: 1, _id: 1 })
     return result;
 };
 
