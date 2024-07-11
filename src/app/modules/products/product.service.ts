@@ -5,8 +5,8 @@ import { ProductModel } from "./product.model";
 
 
 const createProductIntoDB = async (product: TProduct) => {
-    const isFacilityExists = await ProductModel.findOne({ title: product.title })
-    if (isFacilityExists) {
+    const isProductExists = await ProductModel.findOne({ title: product.title })
+    if (isProductExists) {
         throw new AppError(httpStatus.CONFLICT, 'This product is already exists!');
     }
     const result = await ProductModel.create(product)
@@ -25,14 +25,8 @@ const getAllCategoriesFromDB = async () => {
 
 const getASingleProductFromDB = async (id: string) => {
     try {
-        const singleProductInfo = await ProductModel.findById(
-            id,
-            {
-                new: true,
-                runValidators: true,
-                //   session,
-            },
-        );
+        const singleProductInfo = await ProductModel.findById(id);
+        console.log(singleProductInfo);
 
         if (!singleProductInfo) {
             throw new AppError(httpStatus.BAD_REQUEST, 'Failed to get this product');

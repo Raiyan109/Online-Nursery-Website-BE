@@ -27,6 +27,9 @@ const productSchema = new Schema<TProduct>({
     availableInStock: {
         type: Number,
         required: true
+    },
+    description: {
+        type: String,
     }
 }, { timestamps: true })
 
