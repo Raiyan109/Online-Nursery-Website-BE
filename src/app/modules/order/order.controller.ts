@@ -6,10 +6,10 @@ import config from "../../config";
 const stripe = require('stripe')(config.stripe_secret_key);
 
 const createOrder = catchAsync(async (req, res) => {
-    const { name, phone, address } = req.body;
+    const { name, phone, address, isDeleted } = req.body;
 
     const result = await OrderServices.createOrderIntoDB({
-        name, phone, address
+        name, phone, address, isDeleted
     });
 
     sendResponse(res, {
@@ -50,9 +50,11 @@ const stripeCheckout = catchAsync(async (req, res) => {
 });
 
 // Pass Stripe publishable key from server to frontend
-const getConfig = async (req, res) => {
+const getConfig = catchAsync(async (req, res) => {
     res.status(200).json({ publishableKey: config.stripe_publishable_key });
-}
+});
+
+
 
 export const OrderControllers = {
     createOrder,

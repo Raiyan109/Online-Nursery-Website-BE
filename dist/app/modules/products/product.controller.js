@@ -44,6 +44,24 @@ const getAllProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
         data: result,
     });
 }));
+const getAllCategories = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield product_service_1.ProductServices.getAllCategoriesFromDB();
+    // Check if the database collection is empty or no matching data is found
+    if (!result || result.length === 0) {
+        return (0, sendResponse_1.default)(res, {
+            success: false,
+            statusCode: http_status_1.default.NOT_FOUND,
+            message: 'No data found.',
+            data: [],
+        });
+    }
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Categories retrieved successfully',
+        data: result,
+    });
+}));
 const getASingleProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const result = yield product_service_1.ProductServices.getASingleProductFromDB(id);
@@ -77,6 +95,7 @@ const deleteProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
 exports.ProductControllers = {
     createProduct,
     getAllProducts,
+    getAllCategories,
     getASingleProduct,
     updateProduct,
     deleteProduct

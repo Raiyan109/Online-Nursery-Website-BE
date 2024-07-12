@@ -17,8 +17,8 @@ const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const product_model_1 = require("./product.model");
 const createProductIntoDB = (product) => __awaiter(void 0, void 0, void 0, function* () {
-    const isFacilityExists = yield product_model_1.ProductModel.findOne({ title: product.title });
-    if (isFacilityExists) {
+    const isProductExists = yield product_model_1.ProductModel.findOne({ title: product.title });
+    if (isProductExists) {
         throw new AppError_1.default(http_status_1.default.CONFLICT, 'This product is already exists!');
     }
     const result = yield product_model_1.ProductModel.create(product);
@@ -28,13 +28,14 @@ const getAllProductsFromDB = () => __awaiter(void 0, void 0, void 0, function* (
     const result = yield product_model_1.ProductModel.find();
     return result;
 });
+const getAllCategoriesFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield product_model_1.ProductModel.find({}, { category: 1, image: 1, title: 1, _id: 1 });
+    return result;
+});
 const getASingleProductFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const singleProductInfo = yield product_model_1.ProductModel.findById(id, {
-            new: true,
-            runValidators: true,
-            //   session,
-        });
+        const singleProductInfo = yield product_model_1.ProductModel.findById(id);
+        console.log(singleProductInfo);
         if (!singleProductInfo) {
             throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Failed to get this product');
         }
@@ -51,10 +52,11 @@ const updateProductIntoDB = (id, payload) => __awaiter(void 0, void 0, void 0, f
             runValidators: true,
             //   session,
         });
-        if (!updateProductIntoDB) {
+        console.log(updatedProductInfo);
+        if (!updatedProductInfo) {
             throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Failed to update product');
         }
-        return updateProductIntoDB;
+        return updatedProductInfo;
     }
     catch (err) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Failed to update product');
@@ -67,6 +69,7 @@ const deleteProductFromDB = (id) => __awaiter(void 0, void 0, void 0, function* 
 exports.ProductServices = {
     createProductIntoDB,
     getAllProductsFromDB,
+    getAllCategoriesFromDB,
     getASingleProductFromDB,
     updateProductIntoDB,
     deleteProductFromDB

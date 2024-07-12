@@ -26,6 +26,9 @@ const productSchema = new mongoose_1.Schema({
     availableInStock: {
         type: Number,
         required: true
+    },
+    description: {
+        type: String,
     }
 }, { timestamps: true });
 exports.ProductModel = (0, mongoose_1.model)('Product', productSchema);
