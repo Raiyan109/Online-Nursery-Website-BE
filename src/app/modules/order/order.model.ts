@@ -16,6 +16,9 @@ const orderSchema = new Schema<TOrder>({
         type: String,
         required: true
     },
+    isDeleted: {
+        type: Boolean
+    }
 })
 
 export const OrderModel = model<TOrder>('Order', orderSchema)

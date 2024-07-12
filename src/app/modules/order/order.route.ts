@@ -8,4 +8,9 @@ router.post(
     OrderControllers.createOrder,
 );
 
+router.get('/', OrderControllers.getOrders)
+
+router.post('/stripe', OrderControllers.stripeCheckout);
+
+router.get('/config', OrderControllers.getConfig);
 export const OrderRoutes = router;

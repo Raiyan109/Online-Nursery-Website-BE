@@ -6,4 +6,5 @@ export type TOrder = {
     name: string;
     phone: string;
     address: string;
+    isDeleted: boolean;
 } 
