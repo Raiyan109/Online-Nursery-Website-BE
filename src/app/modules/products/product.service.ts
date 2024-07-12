@@ -49,12 +49,13 @@ const updateProductIntoDB = async (id: string, payload: Partial<TProduct>) => {
                 //   session,
             },
         );
+        console.log(updatedProductInfo);
 
-        if (!updateProductIntoDB) {
+        if (!updatedProductInfo) {
             throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update product');
         }
 
-        return updateProductIntoDB;
+        return updatedProductInfo;
     } catch (err) {
         throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update product');
     }

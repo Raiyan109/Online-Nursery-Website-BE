@@ -10,7 +10,7 @@ router.post(
     ProductControllers.createProduct,
 );
 
-router.put(
+router.patch(
     '/:id',
     ProductControllers.updateProduct
 );
