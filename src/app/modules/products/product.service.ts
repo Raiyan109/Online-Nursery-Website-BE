@@ -2,8 +2,13 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { TProduct } from "./product.interface";
 import { ProductModel } from "./product.model";
-import { Document, Types } from "mongoose";
 
+type CategoryItem = {
+    _id: string;
+    image: string;
+    title: string;
+    category: string[];
+};
 
 const createProductIntoDB = async (product: TProduct) => {
     const isProductExists = await ProductModel.findOne({ title: product.title })
@@ -19,16 +24,17 @@ const getAllProductsFromDB = async () => {
     return result;
 };
 
-const getAllCategoriesFromDB = async () => {
-    const result = await ProductModel.find({}, { category: 1, image: 1, title: 1, _id: 1 });
+const getAllCategoriesFromDB = async (): Promise<CategoryItem[]> => {
+    const result: CategoryItem[] = await ProductModel.find({}, { category: 1, image: 1, title: 1, _id: 1 });
 
-    // Use a Set to filter out duplicate categories
-    const uniqueCategories: (Document<unknown, {}, TProduct> & TProduct & { _id: Types.ObjectId; })[] = [];
-    const categorySet = new Set();
+    const uniqueCategories: CategoryItem[] = [];
+    const categorySet = new Set<string>();
+
 
     result.forEach(item => {
-        if (!categorySet.has(item.category)) {
-            categorySet.add(item.category);
+        const category = item.category[0]; // Extract the single category string from the array
+        if (!categorySet.has(category)) {
+            categorySet.add(category);
             uniqueCategories.push(item);
         }
     });
