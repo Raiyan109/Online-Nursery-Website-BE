@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { TProduct } from "./product.interface";
 import { ProductModel } from "./product.model";
+import { Document, Types } from "mongoose";
 
 
 const createProductIntoDB = async (product: TProduct) => {
@@ -19,8 +20,20 @@ const getAllProductsFromDB = async () => {
 };
 
 const getAllCategoriesFromDB = async () => {
-    const result = await ProductModel.find({}, { category: 1, image: 1, title: 1, _id: 1 })
-    return result;
+    const result = await ProductModel.find({}, { category: 1, image: 1, title: 1, _id: 1 });
+
+    // Use a Set to filter out duplicate categories
+    const uniqueCategories: (Document<unknown, {}, TProduct> & TProduct & { _id: Types.ObjectId; })[] = [];
+    const categorySet = new Set();
+
+    result.forEach(item => {
+        if (!categorySet.has(item.category)) {
+            categorySet.add(item.category);
+            uniqueCategories.push(item);
+        }
+    });
+
+    return uniqueCategories;
 };
 
 const getASingleProductFromDB = async (id: string) => {
