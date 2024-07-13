@@ -1,12 +1,20 @@
 import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
-import { TOrder } from "./order.interface";
+import { OrderDetails, TOrder } from "./order.interface";
 import { OrderModel } from "./order.model";
+import { ProductModel } from "../products/product.model";
 
 
-const createOrderIntoDB = async (order: TOrder) => {
-    const { name, phone, address, isDeleted } = order
-    const result = await OrderModel.create({ name, phone, address, isDeleted })
+const createOrderIntoDB = async ({ items, ...orderDetails }: OrderDetails) => {
+
+    const result = await OrderModel.create({ items, ...orderDetails })
+
+    // Update stock levels
+    for (let item of items) {
+        await ProductModel.findByIdAndUpdate(item._id, {
+            $inc: { availableInStock: -item.cartQuantity }
+        });
+    }
     return result
 }
 
