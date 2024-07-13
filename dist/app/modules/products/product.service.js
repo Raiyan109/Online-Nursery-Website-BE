@@ -30,7 +30,16 @@ const getAllProductsFromDB = () => __awaiter(void 0, void 0, void 0, function* (
 });
 const getAllCategoriesFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield product_model_1.ProductModel.find({}, { category: 1, image: 1, title: 1, _id: 1 });
-    return result;
+    const uniqueCategories = [];
+    const categorySet = new Set();
+    result.forEach(item => {
+        const category = item.category[0]; // Extract the single category string from the array
+        if (!categorySet.has(category)) {
+            categorySet.add(category);
+            uniqueCategories.push(item);
+        }
+    });
+    return uniqueCategories;
 });
 const getASingleProductFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
